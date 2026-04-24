@@ -27,7 +27,7 @@ dotenv.set_key(dotenv_path=".env", key_to_set="DT_URL", value_to_set=DT_TENANT_L
 
 subprocess.run(["kind", "create", "cluster", "--config", ".devcontainer/kind-cluster.yml", "--wait", STANDARD_TIMEOUT])
 
-run_command([
+subprocess.run([
     "helm", "upgrade", "--install", "easytrade",
     "oci://europe-docker.pkg.dev/dynatrace-demoability/helm/easytrade",
     "--version", EASYTRADE_CHART_VERSION,
