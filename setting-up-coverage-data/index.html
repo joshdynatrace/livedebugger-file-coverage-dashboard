@@ -1,0 +1,967 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../codespaces/">
+      
+      
+        <link rel="next" href="../building-dashboard/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>3. Setting up Coverage Data - Live Debugger File Coverage Dashboard</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+  <!-- Add scripts that need to run before here -->
+  
+      
+    
+  <!-- Add scripts that need to run afterwards here -->
+  <!-- TODO
+   1. Create an agentless application in Dynatrace
+   2. Replace this snippet with your RUM Snippet
+  -->
+  <script type="text/javascript" src="https://js-cdn.dynatrace.com/jstag/PLACEHOLDEr/REPLACE_WITH_YOUR_SNIPPET/1234abcd1234abcd_complete.js" crossorigin="anonymous"></script>
+
+  <script>
+  function toggleFeedbackForm() {
+    var form = document.getElementById('feedback-form-container');
+    
+    // If form is currently hidden
+    if (!form.style.display || form.style.display == "none") {
+      form.style.display = 'block'
+    }
+  }
+  function submitFeedback() {
+      var rating = document.querySelector('input[name="rating"]:checked');
+      var feedback = document.getElementById('feedback-text').value;
+      rating = rating ? rating.value : "None";
+
+      // Note: CURRENT_PAGE is defined in each bizevent-pagename.js
+      
+      // Only send if at least a rating is available
+      if (rating != "None") {
+        console.log("Sending bizevent now for: ", CURRENT_PAGE);
+        console.log(rating, " // ", feedback);
+        dynatrace.sendBizEvent('feedback', {"page": CURRENT_PAGE, "rating": rating, "feedback": feedback });
+      }
+      else {
+        console.log("Missing data. Do not send feedback.")
+      }
+
+      document.getElementById('feedback-form-container').style.display = 'none';
+  }
+  </script>
+
+  <button id="feedback-button" onclick="toggleFeedbackForm()">🚦Feedback</button>
+  <div id="feedback-form-container">
+    <h4>Tutorial Feedback</h4>
+    <p>Use the form below to provide feedback on this page / tutorial as a whole.</p>
+    <div class="rating">
+      <label><input name="rating" type="radio" value="😞"/>😞</label>
+      <label><input name="rating" type="radio" value="😐"/>😐</label>
+      <label><input name="rating" type="radio" value="😊"/>😊</label>
+    </div>
+    <textarea id="feedback-text" placeholder="Your feedback... (optional)" rows="4" style="width: 100%;"></textarea>
+    <button id="feedback-button" onclick="submitFeedback()" style="margin-top: 10px;">➡️ Submit</button>
+  </div>
+
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../overrides/assets/stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#setting-up-coverage-data" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Live Debugger File Coverage Dashboard" class="md-header__button md-logo" aria-label="Live Debugger File Coverage Dashboard" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Live Debugger File Coverage Dashboard
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              3. Setting up Coverage Data
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/joshDynatrace/livedebugger-file-coverage-dashboard" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    View Code on GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Live Debugger File Coverage Dashboard" class="md-nav__button md-logo" aria-label="Live Debugger File Coverage Dashboard" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Live Debugger File Coverage Dashboard
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/joshDynatrace/livedebugger-file-coverage-dashboard" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    View Code on GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../codespaces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Codespaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Setting up Coverage Data
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Setting up Coverage Data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-pick-a-file-and-identify-candidate-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Pick a File and Identify Candidate Lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-scatter-breakpoints-across-executable-looking-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Scatter Breakpoints Across Executable-Looking Lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-verify-the-breakpoint-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Verify the Breakpoint Set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-generate-traffic-through-the-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Generate Traffic Through the File
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-inspect-raw-coverage-data-from-applicationsnapshots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Inspect Raw Coverage Data from application.snapshots
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Inspect Raw Coverage Data from application.snapshots">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#most-recent-snapshots-for-the-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Most recent snapshots for the file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distinct-hit-lines-in-the-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distinct hit lines in the file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hits-by-function-and-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hits by function and line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage-summary-for-the-scattered-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage summary for the scattered set
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../building-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Building the Dashboard
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../whats-next/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. What's Next
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#step-1-pick-a-file-and-identify-candidate-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Pick a File and Identify Candidate Lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-2-scatter-breakpoints-across-executable-looking-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Scatter Breakpoints Across Executable-Looking Lines
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-3-verify-the-breakpoint-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3: Verify the Breakpoint Set
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-4-generate-traffic-through-the-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Generate Traffic Through the File
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-5-inspect-raw-coverage-data-from-applicationsnapshots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Inspect Raw Coverage Data from application.snapshots
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 5: Inspect Raw Coverage Data from application.snapshots">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#most-recent-snapshots-for-the-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Most recent snapshots for the file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#distinct-hit-lines-in-the-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Distinct hit lines in the file
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hits-by-function-and-line" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hits by function and line
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#coverage-summary-for-the-scattered-set" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coverage summary for the scattered set
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="setting-up-coverage-data">Setting up Coverage Data<a class="headerlink" href="#setting-up-coverage-data" title="Permanent link">#</a></h1>
+<script>
+var CURRENT_PAGE = "3. setting-up-coverage-data";
+
+document.addEventListener('DOMContentLoaded', function() {
+  dynatrace.sendBizEvent('page_load', {"page": CURRENT_PAGE});
+});
+</script>
+
+<p>Steps 1–5 walk through choosing a file, scattering breakpoints across it, generating traffic, and validating the snapshot data before building the dashboard.</p>
+<hr />
+<h2 id="step-1-pick-a-file-and-identify-candidate-lines">Step 1: Pick a File and Identify Candidate Lines<a class="headerlink" href="#step-1-pick-a-file-and-identify-candidate-lines" title="Permanent link">#</a></h2>
+<p>For this example, use <code>OrderController.java</code> from the EasyTrade <code>creditcardorderservice</code>.
+The same pattern works for any file type that Live Debugger can instrument.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">SRC</span><span class="o">=</span>easytrade/src/credit-card-order-service/src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
+<span class="nv">FILE</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span><span class="k">)</span>
+</code></pre></div>
+<p>Start by listing the file with line numbers to get a feel for its structure:</p>
+<div class="highlight"><pre><span></span><code>nl<span class="w"> </span>-ba<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;100,340p&#39;</span>
+</code></pre></div>
+<p>At this point you have two choices:</p>
+<ul>
+<li><strong>Manual placement</strong> — choose exact lines that matter</li>
+<li><strong>Scatter placement</strong> — generate a broader set of candidate lines and instrument them in bulk</li>
+</ul>
+<p>For coverage-style analysis, scatter placement is the better fit.</p>
+<hr />
+<h2 id="step-2-scatter-breakpoints-across-executable-looking-lines">Step 2: Scatter Breakpoints Across Executable-Looking Lines<a class="headerlink" href="#step-2-scatter-breakpoints-across-executable-looking-lines" title="Permanent link">#</a></h2>
+<p>A simple way to generate candidate lines is to skip blank lines and obvious comment-only lines, then sample the rest.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">SRC</span><span class="o">=</span>easytrade/src/credit-card-order-service/src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
+<span class="nv">FILE</span><span class="o">=</span><span class="k">$(</span>basename<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span><span class="k">)</span>
+
+awk<span class="w"> </span><span class="s1">&#39;</span>
+<span class="s1">  {</span>
+<span class="s1">    line = $0</span>
+<span class="s1">    sub(/^[[:space:]]+/, &quot;&quot;, line)</span>
+<span class="s1">    sub(/[[:space:]]+$/, &quot;&quot;, line)</span>
+<span class="s1">  }</span>
+<span class="s1">  line == &quot;&quot; { next }</span>
+<span class="s1">  line ~ /^\/\// { next }</span>
+<span class="s1">  line ~ /^\/\*/ { next }</span>
+<span class="s1">  line ~ /^\*/ { next }</span>
+<span class="s1">  line ~ /^@/ { next }</span>
+<span class="s1">  line ~ /^(package|import)[[:space:]]/ { next }</span>
+<span class="s1">  line ~ /^[{}]+$/ { next }</span>
+<span class="s1">  line ~ /^(public|protected|private|abstract|final|sealed|non-sealed)?[[:space:]]*(class|interface|enum|record)[[:space:]]/ { next }</span>
+<span class="s1">  line ~ /^(public|protected|private|static|final|abstract|synchronized|native|default|strictfp)[[:space:]]/ &amp;&amp; line ~ /\)[[:space:]]*(throws[[:space:]].*)?\{?$/ { next }</span>
+<span class="s1">  { print NR }</span>
+<span class="s1">&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SRC</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>shuf<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">20</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-n<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>&gt;<span class="w"> </span>breakpoint-lines.txt
+
+cat<span class="w"> </span>breakpoint-lines.txt
+</code></pre></div>
+<p>That gives you a reproducible list of candidate line numbers while skipping obvious non-executable lines such as comments, annotations, imports, braces, class declarations, and likely method signatures.</p>
+<p>Create one Live Debugger breakpoint per line:</p>
+<div class="highlight"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="nb">read</span><span class="w"> </span>-r<span class="w"> </span>line<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Creating breakpoint at </span><span class="si">${</span><span class="nv">FILE</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">line</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">  </span>dtctl<span class="w"> </span>create<span class="w"> </span>breakpoint<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">FILE</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">line</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">done</span><span class="w"> </span>&lt;<span class="w"> </span>breakpoint-lines.txt
+</code></pre></div>
+<p>If you want to start with a smaller hand-picked set before scattering wider, use a file like this instead:</p>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span>&gt;<span class="w"> </span>breakpoint-lines.txt<span class="w"> </span><span class="s">&lt;&lt;&#39;EOF&#39;</span>
+<span class="s">113</span>
+<span class="s">115</span>
+<span class="s">121</span>
+<span class="s">132</span>
+<span class="s">157</span>
+<span class="s">188</span>
+<span class="s">214</span>
+<span class="s">241</span>
+<span class="s">267</span>
+<span class="s">300</span>
+<span class="s">306</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>Then run the same loop.</p>
+<hr />
+<h2 id="step-3-verify-the-breakpoint-set">Step 3: Verify the Breakpoint Set<a class="headerlink" href="#step-3-verify-the-breakpoint-set" title="Permanent link">#</a></h2>
+<p>List the breakpoints in the current workspace:</p>
+<div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>get<span class="w"> </span>breakpoints
+</code></pre></div>
+<p>Inspect a specific location:</p>
+<p><div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>describe<span class="w"> </span>breakpoint<span class="w"> </span><span class="s2">&quot;OrderController.java:306&quot;</span>
+</code></pre></div>
+Note that the breakpoint status should be 'enabled' and not 'pending' to capture breakpoint data.</p>
+<p>If you want a structured inventory of the scatter set:</p>
+<div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>get<span class="w"> </span>breakpoints<span class="w"> </span>-o<span class="w"> </span>json
+</code></pre></div>
+<p>Store the total number of instrumented lines as your denominator for the dashboard:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">TARGET_LINES</span><span class="o">=</span><span class="k">$(</span>wc<span class="w"> </span>-l<span class="w"> </span>&lt;<span class="w"> </span>breakpoint-lines.txt<span class="w"> </span><span class="p">|</span><span class="w"> </span>tr<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39; &#39;</span><span class="k">)</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$TARGET_LINES</span><span class="s2">&quot;</span>
+</code></pre></div>
+<p>If <code>TARGET_LINES=11</code>, your dashboard can compute a percentage from snapshot activity alone.</p>
+<hr />
+<h2 id="step-4-generate-traffic-through-the-file">Step 4: Generate Traffic Through the File<a class="headerlink" href="#step-4-generate-traffic-through-the-file" title="Permanent link">#</a></h2>
+<p>Now hit the application path that exercises the file.
+This can be:</p>
+<ul>
+<li>A curl loop against the service endpoint</li>
+<li>An integration test suite</li>
+<li>A replay workload</li>
+<li>A synthetic monitor</li>
+<li>A workflow that calls the service</li>
+</ul>
+<p>For example:</p>
+<div class="highlight"><pre><span></span><code><span class="k">for</span><span class="w"> </span>_<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>seq<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">50</span><span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>curl<span class="w"> </span>-sS<span class="w"> </span><span class="s2">&quot;https://your-service.example/api/orders/latest-status&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+<span class="k">done</span>
+</code></pre></div>
+<p>Each time one of your scattered breakpoints is hit, Live Debugger emits a snapshot record into <code>application.snapshots</code>.</p>
+<hr />
+<h2 id="step-5-inspect-raw-coverage-data-from-applicationsnapshots">Step 5: Inspect Raw Coverage Data from <code>application.snapshots</code><a class="headerlink" href="#step-5-inspect-raw-coverage-data-from-applicationsnapshots" title="Permanent link">#</a></h2>
+<p>Before building the dashboard, validate the data path directly with <code>dtctl query</code>.</p>
+<h3 id="most-recent-snapshots-for-the-file">Most recent snapshots for the file<a class="headerlink" href="#most-recent-snapshots-for-the-file" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>query<span class="w"> </span><span class="s1">&#39;</span>
+<span class="s1">fetch application.snapshots</span>
+<span class="s1">| filter code.filepath == &quot;OrderController.java&quot;</span>
+<span class="s1">| sort timestamp desc</span>
+<span class="s1">| fields timestamp, code.filepath, code.function, code.line.number, snapshot.id, trace.id</span>
+<span class="s1">| limit 20</span>
+<span class="s1">&#39;</span>
+</code></pre></div>
+<h3 id="distinct-hit-lines-in-the-file">Distinct hit lines in the file<a class="headerlink" href="#distinct-hit-lines-in-the-file" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>query<span class="w"> </span><span class="s1">&#39;</span>
+<span class="s1">fetch application.snapshots</span>
+<span class="s1">| filter code.filepath == &quot;OrderController.java&quot;</span>
+<span class="s1">| summarize covered_lines = countDistinct(code.line.number)</span>
+<span class="s1">&#39;</span>
+</code></pre></div>
+<h3 id="hits-by-function-and-line">Hits by function and line<a class="headerlink" href="#hits-by-function-and-line" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>query<span class="w"> </span><span class="s1">&#39;</span>
+<span class="s1">fetch application.snapshots</span>
+<span class="s1">| filter code.filepath == &quot;OrderController.java&quot;</span>
+<span class="s1">| fieldsAdd line = toLong(code.line.number)</span>
+<span class="s1">| summarize hits = count(), by: { code.function, line }</span>
+<span class="s1">| sort code.function asc, line asc</span>
+<span class="s1">&#39;</span>
+</code></pre></div>
+<h3 id="coverage-summary-for-the-scattered-set">Coverage summary for the scattered set<a class="headerlink" href="#coverage-summary-for-the-scattered-set" title="Permanent link">#</a></h3>
+<p>Replace <code>11</code> with the number of breakpoints you actually created.</p>
+<div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>query<span class="w"> </span><span class="s1">&#39;</span>
+<span class="s1">fetch application.snapshots</span>
+<span class="s1">| filter code.filepath == &quot;OrderController.java&quot;</span>
+<span class="s1">| summarize total_hits = count(), covered_lines = countDistinct(code.line.number), functions_hit = countDistinct(code.function)</span>
+<span class="s1">| fieldsAdd target_lines = 11</span>
+<span class="s1">| fieldsAdd coverage_pct = round(100.0 * covered_lines / target_lines, decimals: 2)</span>
+<span class="s1">&#39;</span>
+</code></pre></div>
+<p>This is the core trick: the numerator comes from distinct line numbers in <code>application.snapshots</code>, and the denominator comes from the set of lines you intentionally instrumented.</p>
+<div class="grid cards">
+<ul>
+<li><a href="../building-dashboard/">Step 6: Building the Dashboard <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span></a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
