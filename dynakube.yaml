@@ -4,7 +4,7 @@ data:
   dataIngestToken: ${DT_DATA_INGEST_TOKEN_B64}
 kind: Secret
 metadata:
-  name: dtctl-ai-demo
+  name: file-coverage-dashboard
   namespace: dynatrace
   labels:
     dynatrace.com/created-by: "dynatrace.kubernetes"
@@ -13,7 +13,7 @@ type: Opaque
 apiVersion: dynatrace.com/v1beta6
 kind: DynaKube
 metadata:
-  name: dtctl-ai-demo
+  name: file-coverage-dashboard
   namespace: dynatrace
   labels:
     dynatrace.com/created-by: "dynatrace.kubernetes"
@@ -22,7 +22,7 @@ metadata:
 # Link to api reference for further information: https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/reference/dynakube-parameters
 spec:
   apiUrl: ${DT_URL}/api
-  tokens: dtctl-ai-demo
+  tokens: file-coverage-dashboard
   skipCertCheck: true
   activeGate:
     capabilities:
@@ -51,19 +51,19 @@ spec:
 apiVersion: dynatrace.com/v1beta6
 kind: DynaKube
 metadata:
-  name: dtctl-ai-demo-agents
+  name: file-coverage-dashboard-agents
   namespace: dynatrace
   labels:
     dynatrace.com/created-by: "dynatrace.kubernetes"
 # Link to api reference for further information: https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/reference/dynakube-parameters
 spec:
   apiUrl: ${DT_URL}/api
-  tokens: dtctl-ai-demo
+  tokens: file-coverage-dashboard
   skipCertCheck: true
   metadataEnrichment:
     enabled: true
   oneAgent:
-    hostGroup: dtctl-ai-demo-agents
+    hostGroup: file-coverage-dashboard-agents
     cloudNativeFullStack:
       env:
         - name: ONEAGENT_ENABLE_VOLUME_STORAGE
