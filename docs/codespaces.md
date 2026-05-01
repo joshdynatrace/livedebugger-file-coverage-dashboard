@@ -47,6 +47,7 @@ Once the Codespace finishes initialising, the following is ready:
 
 - A local **Kind** Kubernetes cluster
 - **EasyTrade** — deployed to the `easytrade` namespace
+- **Dynatrace OneAgent** — deployed via the Dynatrace Operator into the cluster
 - `dtctl` — installed via the devcontainer feature
 
 ---
