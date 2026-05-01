@@ -1,0 +1,91 @@
+apiVersion: v1
+data:
+  apiToken: ${DT_API_TOKEN_B64}
+  dataIngestToken: ${DT_DATA_INGEST_TOKEN_B64}
+kind: Secret
+metadata:
+  name: dtctl-ai-demo
+  namespace: dynatrace
+  labels:
+    dynatrace.com/created-by: "dynatrace.kubernetes"
+type: Opaque
+---
+apiVersion: dynatrace.com/v1beta6
+kind: DynaKube
+metadata:
+  name: dtctl-ai-demo
+  namespace: dynatrace
+  labels:
+    dynatrace.com/created-by: "dynatrace.kubernetes"
+  annotations:
+    feature.dynatrace.com/k8s-app-enabled: "true"
+# Link to api reference for further information: https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/reference/dynakube-parameters
+spec:
+  apiUrl: ${DT_URL}/api
+  tokens: dtctl-ai-demo
+  skipCertCheck: true
+  activeGate:
+    capabilities:
+      - kubernetes-monitoring
+    resources:
+      requests:
+        cpu: 300m
+        memory: 1Gi
+      limits:
+        cpu: 1500m
+        memory: 3Gi
+    replicas: 1
+  templates:
+    otelCollector:
+      imageRef:
+        repository: public.ecr.aws/dynatrace/dynatrace-otel-collector
+        tag: latest
+  telemetryIngest:
+    protocols:
+      - jaeger
+      - otlp
+      - statsd
+      - zipkin
+    serviceName: telemetry-ingest
+---
+apiVersion: dynatrace.com/v1beta6
+kind: DynaKube
+metadata:
+  name: dtctl-ai-demo-agents
+  namespace: dynatrace
+  labels:
+    dynatrace.com/created-by: "dynatrace.kubernetes"
+# Link to api reference for further information: https://docs.dynatrace.com/docs/ingest-from/setup-on-k8s/reference/dynakube-parameters
+spec:
+  apiUrl: ${DT_URL}/api
+  tokens: dtctl-ai-demo
+  skipCertCheck: true
+  metadataEnrichment:
+    enabled: true
+  oneAgent:
+    hostGroup: dtctl-ai-demo-agents
+    cloudNativeFullStack:
+      env:
+        - name: ONEAGENT_ENABLE_VOLUME_STORAGE
+          value: "true"
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+          operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+  activeGate:
+    capabilities:
+      - routing
+      - debugging
+      - kubernetes-monitoring
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+    replicas: 1
+  logMonitoring: {}
