@@ -37,3 +37,11 @@ kubectl port-forward -n easytrade svc/easytrade-frontendreverseproxy 8080:8080 &
 Then open port `8080` in the Codespaces port forwarding panel.
 
 Default credentials: `demouser` / `demopass`
+
+## Docs
+
+To deploy the docs:
+
+```bash
+mkdocs gh-deploy
+```
