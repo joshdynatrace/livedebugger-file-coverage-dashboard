@@ -379,3 +379,39 @@ def send_startup_ping(demo_name=""):
         headers=headers,
         json=body
     )
+
+def install_dynatrace_oneagent(dt_tenant_live):
+    required_env_vars = ["DT_API_TOKEN", "DT_DATA_INGEST_TOKEN"]
+    missing_vars = [var_name for var_name in required_env_vars if not os.environ.get(var_name)]
+    if missing_vars:
+        exit(f"Required variables are missing for Dynatrace OneAgent install: {', '.join(missing_vars)}")
+
+    # Needed so envsubst can replace ${DT_URL} in dynakube.yaml.
+    os.environ["DT_URL"] = dt_tenant_live
+    os.environ["DT_API_TOKEN_B64"] = base64.b64encode(os.environ["DT_API_TOKEN"].encode("utf-8")).decode("utf-8")
+    os.environ["DT_DATA_INGEST_TOKEN_B64"] = base64.b64encode(os.environ["DT_DATA_INGEST_TOKEN"].encode("utf-8")).decode("utf-8")
+
+    run_command([
+        "helm", "upgrade", "--install", "dynatrace-operator",
+        "oci://public.ecr.aws/dynatrace/dynatrace-operator",
+        "--create-namespace",
+        "--namespace", "dynatrace",
+        "--atomic"
+    ])
+
+    dynakube_apply = subprocess.run(
+        ["bash", "-lc", "envsubst '${DT_URL} ${DT_API_TOKEN_B64} ${DT_DATA_INGEST_TOKEN_B64}' < dynakube.yaml | kubectl apply -f -"],
+        capture_output=True,
+        text=True,
+        encoding="UTF8",
+    )
+
+    if dynakube_apply.stdout:
+        logger.info(dynakube_apply.stdout)
+
+    if dynakube_apply.returncode > 0:
+        exit(
+            "Failed to apply dynakube.yaml with envsubst. "
+            f"Return Code: {dynakube_apply.returncode}. "
+            f"Error: {dynakube_apply.stderr}."
+        )

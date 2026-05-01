@@ -12,7 +12,7 @@ For this example, use `OrderController.java` from the EasyTrade `creditcardorder
 The same pattern works for any file type that Live Debugger can instrument.
 
 ```bash
-SRC=src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
+SRC=easytrade/src/credit-card-order-service/src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
 FILE=$(basename "$SRC")
 ```
 
@@ -36,7 +36,7 @@ For coverage-style analysis, scatter placement is the better fit.
 A simple way to generate candidate lines is to skip blank lines and obvious comment-only lines, then sample the rest.
 
 ```bash
-SRC=src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
+SRC=easytrade/src/credit-card-order-service/src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
 FILE=$(basename "$SRC")
 
 awk '
@@ -110,6 +110,7 @@ Inspect a specific location:
 ```bash
 dtctl describe breakpoint "OrderController.java:306"
 ```
+Note that the breakpoint status should be 'enabled' and not 'pending' to capture breakpoint data.
 
 If you want a structured inventory of the scatter set:
 

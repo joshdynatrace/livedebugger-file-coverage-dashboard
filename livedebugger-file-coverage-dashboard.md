@@ -56,13 +56,13 @@ The same pattern works for any file type that Live Debugger can instrument.
 Assume the source file in the repository is:
 
 ```text
-src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
+easytrade/src/credit-card-order-service/src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
 ```
 
 Because breakpoint creation uses the source location format `File.java:line`, keep both values around:
 
 ```bash
-SRC=src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
+SRC=easytrade/src/credit-card-order-service/src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
 FILE=$(basename "$SRC")
 ```
 
@@ -86,7 +86,7 @@ For coverage-style analysis, scatter placement is the better fit.
 A simple way to generate candidate lines is to skip blank lines and obvious comment-only lines, then sample the rest.
 
 ```bash
-SRC=src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
+SRC=easytrade/src/credit-card-order-service/src/main/java/com/dynatrace/easytrade/creditcardorderservice/OrderController.java
 FILE=$(basename "$SRC")
 
 awk '
