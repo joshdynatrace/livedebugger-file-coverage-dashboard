@@ -28,6 +28,8 @@ Click the badge below to open a new Codespace from the `main` branch:
     | `DT_ENVIRONMENT_ID` | Your Dynatrace environment ID, e.g. `abc12345` from `https://abc12345.live.dynatrace.com` |
     | `DT_ENVIRONMENT_TYPE` | Your environment type: `live`, `sprint`, or `dev`. If unsure, use `live`. |
     | `DT_PLATFORM_TOKEN` | Dynatrace Platform token for `dtctl` — see required scopes below |
+    | `DT_API_TOKEN` | Dynatrace API token — requires the `installerDownload` scope for OneAgent installation |
+    | `DT_DATA_INGEST_TOKEN` | Dynatrace API token — requires `metrics.ingest`, `logs.ingest`, and `openTelemetryTrace.ingest` scopes |
 
 ### DT_PLATFORM_TOKEN Scopes
 
