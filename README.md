@@ -31,7 +31,7 @@ Open this repository in GitHub Codespaces. The environment will automatically:
 Once the Codespace is ready, expose the EasyTrade frontend with:
 
 ```bash
-kubectl port-forward -n easytrade svc/easytrade-frontendreverseproxy 8080:8080
+kubectl port-forward -n easytrade svc/easytrade-frontendreverseproxy 8080:8080 &
 ```
 
 Then open port `8080` in the Codespaces port forwarding panel.
