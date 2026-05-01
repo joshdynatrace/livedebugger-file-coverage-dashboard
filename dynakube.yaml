@@ -35,18 +35,6 @@ spec:
         cpu: 1500m
         memory: 3Gi
     replicas: 1
-  templates:
-    otelCollector:
-      imageRef:
-        repository: public.ecr.aws/dynatrace/dynatrace-otel-collector
-        tag: latest
-  telemetryIngest:
-    protocols:
-      - jaeger
-      - otlp
-      - statsd
-      - zipkin
-    serviceName: telemetry-ingest
 ---
 apiVersion: dynatrace.com/v1beta6
 kind: DynaKube

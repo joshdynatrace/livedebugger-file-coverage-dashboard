@@ -37,7 +37,9 @@ subprocess.run([
     "--version", EASYTRADE_CHART_VERSION,
     "--namespace", "easytrade",
     "--create-namespace",
-    "--atomic"
+    "--atomic",
+    "--set", "aggregator-service.enabled=false",
+    "--set", "third-party-service.enabled=false",
 ])
 
 # Restart backend once for the Live Debugger, if OneAgent isn't started yet it may not pick it up
