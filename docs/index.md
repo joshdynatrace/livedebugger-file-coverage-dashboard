@@ -29,8 +29,10 @@ By the end of this lab, you will have:
 
 You need:
 
-- A configured Dynatrace environment with Live Debugger enabled
-- A Dynatrace Platform Token with Live Debugger scopes
+- A configured Dynatrace environment with [Live Debugger](https://docs.dynatrace.com/docs/observe/application-observability/live-debugger) enabled
+- A Dynatrace Platform Token (`DT_PLATFORM_TOKEN`) with Live Debugger scopes
+- A Dynatrace API Token (`DT_API_TOKEN`) — used by the Dynatrace Operator to install OneAgent
+- A Dynatrace Data Ingest Token (`DT_DATA_INGEST_TOKEN`) with `metrics.ingest`, `logs.ingest`, and `openTelemetryTrace.ingest` scopes
 - `dtctl` installed (handled automatically in Codespaces)
 - A target workload — this lab uses **EasyTrade**, deployed to a local Kind cluster
 
