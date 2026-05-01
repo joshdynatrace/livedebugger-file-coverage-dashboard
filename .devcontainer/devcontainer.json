@@ -67,6 +67,12 @@
 		},
 		  "DT_PLATFORM_TOKEN": {
 	    	    "description": "Dynatrace Platform token for use with the DTCTL command line tool"
+		},
+		  "DT_API_TOKEN": {
+	    	    "description": "The Operator token (former API token) is used by the Dynatrace Operator to manage settings and the lifecycle of all Dynatrace components in the Kubernetes cluster"
+		},
+		  "DT_DATA_INGEST_TOKEN": {
+	    	    "description": "The Data Ingest token is used by the Dynatrace Operator to send data from the OneAgent to Dynatrace. It is required for OneAgent versions 1.300+"
 		}
 	}
 }
