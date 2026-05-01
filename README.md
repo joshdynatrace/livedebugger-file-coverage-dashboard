@@ -14,6 +14,8 @@ The walkthrough shows how to scatter Live Debugger breakpoints across a source f
 | `DT_ENVIRONMENT_ID` | Your environment ID, e.g. `abc12345` from `https://abc12345.live.dynatrace.com` |
 | `DT_ENVIRONMENT_TYPE` | `live`, `sprint`, or `dev`. If unsure, use `live`. |
 | `DT_PLATFORM_TOKEN` | Dynatrace Platform token for use with the `dtctl` command line tool |
+| `DT_API_TOKEN` | Dynatrace API token — requires the `installerDownload` scope for OneAgent installation |
+| `DT_DATA_INGEST_TOKEN` | Dynatrace API token — requires the `metrics.ingest`, `logs.ingest`, and `openTelemetryTrace.ingest` scopes |
 
 ## Getting started
 
@@ -21,7 +23,8 @@ Open this repository in GitHub Codespaces. The environment will automatically:
 
 1. Install the RunMe CLI
 2. Create a local Kind Kubernetes cluster
-3. Deploy the [EasyTrade](https://github.com/Dynatrace/easytrade) demo application via Helm
+3. Install the Dynatrace OneAgent via the Dynatrace Operator
+4. Deploy the [EasyTrade](https://github.com/Dynatrace/easytrade) demo application via Helm
 
 ## Accessing EasyTrade
 
