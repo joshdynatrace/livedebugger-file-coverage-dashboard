@@ -40,6 +40,12 @@ subprocess.run([
     "--atomic",
     "--set", "aggregator-service.enabled=false",
     "--set", "third-party-service.enabled=false",
+    "--set", "broker-service.enabled=false",
+    "--set", "calculationservice.enabled=false",
+    "--set", "contentcreator.enabled=false",
+    "--set", "offerservice.enabled=false",
+    "--set", "pricing-service.enabled=false",
+    "--set", "rabbitmq.enabled=false",
 ])
 
 # Restart backend once for the Live Debugger, if OneAgent isn't started yet it may not pick it up
