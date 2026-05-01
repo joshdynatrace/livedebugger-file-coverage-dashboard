@@ -19,7 +19,9 @@ The walkthrough shows how to scatter Live Debugger breakpoints across a source f
 
 ## Getting started
 
-Open this repository in GitHub Codespaces. The environment will automatically:
+To spin up the environment, go to **Code > Codespaces > New with options**, or directly by [clicking here](https://codespaces.new/joshDynatrace/livedebugger-file-coverage-dashboard?quickstart=1).
+
+The environment will automatically:
 
 1. Install the RunMe CLI
 2. Create a local Kind Kubernetes cluster
@@ -38,10 +40,6 @@ Then open port `8080` in the Codespaces port forwarding panel.
 
 Default credentials: `demouser` / `demopass`
 
-## Docs
+---
 
-To deploy the docs:
-
-```bash
-mkdocs gh-deploy
-```
+## [Get started building a File Coverage Dashboard!](https://joshdynatrace.github.io/livedebugger-file-coverage-dashboard/)
