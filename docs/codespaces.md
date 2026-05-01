@@ -33,6 +33,7 @@ Click the badge below to open a new Codespace from the `main` branch:
 
 Your platform token requires at least these scopes:
 
+- `app-engine:apps:run`
 - `dev-obs:breakpoints:set`
 - `storage:application.snapshots:read`
 
@@ -56,7 +57,7 @@ Configure your token and environment context:
 
 ```bash
 dtctl config set-credentials my-token \
-  --token "dt0s16.XXXXXXXX.YYYYYYYY"
+  --token "$DT_PLATFORM_TOKEN"
 
 dtctl config set-context my-env \
   --environment "https://abc12345.apps.dynatrace.com" \
