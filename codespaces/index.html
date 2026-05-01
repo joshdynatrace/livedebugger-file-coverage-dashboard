@@ -804,6 +804,14 @@ document.addEventListener('DOMContentLoaded', function() {
 <td><code>DT_PLATFORM_TOKEN</code></td>
 <td>Dynatrace Platform token for <code>dtctl</code> — see required scopes below</td>
 </tr>
+<tr>
+<td><code>DT_API_TOKEN</code></td>
+<td>Dynatrace API token — requires the <code>installerDownload</code> scope for OneAgent installation</td>
+</tr>
+<tr>
+<td><code>DT_DATA_INGEST_TOKEN</code></td>
+<td>Dynatrace API token — requires <code>metrics.ingest</code>, <code>logs.ingest</code>, and <code>openTelemetryTrace.ingest</code> scopes</td>
+</tr>
 </tbody>
 </table>
 </div>
