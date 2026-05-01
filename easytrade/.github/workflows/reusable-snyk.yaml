@@ -1,0 +1,63 @@
+name: Snyk vulnerability scan
+on:
+  workflow_call:
+    secrets:
+      SNYK_API_TOKEN:
+        required: true
+
+jobs:
+  snyk:
+    name: Run Snyk vulnerability scan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_API_TOKEN }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Snyk CLI
+        uses: snyk/actions/setup@master
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "src/pricing-service/go.mod"
+
+      - name: Restore .NET projects
+        run: for PROJECT in $(find . -name *.csproj); do dotnet restore $PROJECT; done
+
+      - name: Run Snyk test
+        run: snyk test --all-projects --severity-threshold=high
+
+      - name: Run Snyk monitor
+        if: github.ref_name == 'main'
+        run: >
+          snyk monitor
+          --all-projects
+          --org=capability_supportability_services
+          --target-reference=main
+          --project-environment=external
+          --project-lifecycle=sandbox
+          --project-business-criticality=low
+          --project-tags=team=team-demoability
