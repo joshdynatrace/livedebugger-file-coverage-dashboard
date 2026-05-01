@@ -29,8 +29,8 @@ spec:
       - kubernetes-monitoring
     resources:
       requests:
-        cpu: 300m
-        memory: 1Gi
+        cpu: 100m
+        memory: 512Mi
       limits:
         cpu: 1500m
         memory: 3Gi
@@ -82,8 +82,8 @@ spec:
       - kubernetes-monitoring
     resources:
       requests:
-        cpu: 250m
-        memory: 1Gi
+        cpu: 100m
+        memory: 512Mi
       limits:
         cpu: 1000m
         memory: 2Gi
