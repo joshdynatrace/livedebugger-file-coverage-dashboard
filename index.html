@@ -638,8 +638,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">#</a></h2>
 <p>You need:</p>
 <ul>
-<li>A configured Dynatrace environment with Live Debugger enabled</li>
-<li>A Dynatrace Platform Token with Live Debugger scopes</li>
+<li>A configured Dynatrace environment with <a href="https://docs.dynatrace.com/docs/observe/application-observability/live-debugger">Live Debugger</a> enabled</li>
+<li>A Dynatrace Platform Token (<code>DT_PLATFORM_TOKEN</code>) with Live Debugger scopes</li>
+<li>A Dynatrace API Token (<code>DT_API_TOKEN</code>) — used by the Dynatrace Operator to install OneAgent</li>
+<li>A Dynatrace Data Ingest Token (<code>DT_DATA_INGEST_TOKEN</code>) with <code>metrics.ingest</code>, <code>logs.ingest</code>, and <code>openTelemetryTrace.ingest</code> scopes</li>
 <li><code>dtctl</code> installed (handled automatically in Codespaces)</li>
 <li>A target workload — this lab uses <strong>EasyTrade</strong>, deployed to a local Kind cluster</li>
 </ul>
