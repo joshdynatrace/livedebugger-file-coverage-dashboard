@@ -468,26 +468,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-set-workspace-filters" class="md-nav__link">
+  <a href="#5-troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Set Workspace Filters
+        5. Troubleshooting
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6-troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Troubleshooting
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="6. Troubleshooting">
+    <nav class="md-nav" aria-label="5. Troubleshooting">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -694,26 +683,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-set-workspace-filters" class="md-nav__link">
+  <a href="#5-troubleshooting" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Set Workspace Filters
+        5. Troubleshooting
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#6-troubleshooting" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Troubleshooting
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="6. Troubleshooting">
+    <nav class="md-nav" aria-label="5. Troubleshooting">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -846,17 +824,7 @@ dtctl<span class="w"> </span>config<span class="w"> </span>set-context<span clas
 <div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>doctor
 </code></pre></div>
 <hr />
-<h2 id="5-set-workspace-filters">5. Set Workspace Filters<a class="headerlink" href="#5-set-workspace-filters" title="Permanent link">#</a></h2>
-<p><code>dtctl</code> resolves the Live Debugger workspace from the current working directory.
-Before creating breakpoints, tell it which workload to target:</p>
-<div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>update<span class="w"> </span>breakpoint<span class="w"> </span>--filters<span class="w"> </span>k8s.namespace.name:easytrade
-</code></pre></div>
-<p>Replace <code>easytrade</code> with your actual namespace if different.
-You can also filter by a specific process group instance:</p>
-<div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>update<span class="w"> </span>breakpoint<span class="w"> </span>--filters<span class="w"> </span>k8s.namespace.name:easytrade,dt.entity.process_group_instance:PROCESS_GROUP_INSTANCE-1234567890ABCDEF
-</code></pre></div>
-<hr />
-<h2 id="6-troubleshooting">6. Troubleshooting<a class="headerlink" href="#6-troubleshooting" title="Permanent link">#</a></h2>
+<h2 id="5-troubleshooting">5. Troubleshooting<a class="headerlink" href="#5-troubleshooting" title="Permanent link">#</a></h2>
 <h3 id="cluster-health">Cluster health<a class="headerlink" href="#cluster-health" title="Permanent link">#</a></h3>
 <p>Confirm the Kind cluster is running:</p>
 <div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span>cluster-info
