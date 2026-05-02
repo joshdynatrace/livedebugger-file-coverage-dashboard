@@ -2,11 +2,29 @@
 
 --8<-- "snippets/bizevent-setting-up-coverage-data.js"
 
-Steps 1–5 walk through choosing a file, scattering breakpoints across it, generating traffic, and validating the snapshot data before building the dashboard.
+Steps 1–6 walk through setting workspace filters, choosing a file, scattering breakpoints across it, generating traffic, and validating the snapshot data before building the dashboard.
 
 ---
 
-## Step 1: Pick a File and Identify Candidate Lines
+## Step 1: Set Workspace Filters
+
+`dtctl` resolves the Live Debugger workspace from the current working directory.
+Before creating breakpoints, tell it which workload to target:
+
+```bash
+dtctl update breakpoint --filters k8s.namespace.name:easytrade
+```
+
+Replace `easytrade` with your actual namespace if different.
+You can also filter by a specific process group instance:
+
+```bash
+dtctl update breakpoint --filters k8s.namespace.name:easytrade,dt.entity.process_group_instance:PROCESS_GROUP_INSTANCE-1234567890ABCDEF
+```
+
+---
+
+## Step 2: Pick a File and Identify Candidate Lines
 
 For this example, use `OrderController.java` from the EasyTrade `creditcardorderservice`.
 The same pattern works for any file type that Live Debugger can instrument.
@@ -31,7 +49,7 @@ For coverage-style analysis, scatter placement is the better fit.
 
 ---
 
-## Step 2: Scatter Breakpoints Across Executable-Looking Lines
+## Step 3: Scatter Breakpoints Across Executable-Looking Lines
 
 A simple way to generate candidate lines is to skip blank lines and obvious comment-only lines, then sample the rest.
 
@@ -97,7 +115,7 @@ Then run the same loop.
 
 ---
 
-## Step 3: Verify the Breakpoint Set
+## Step 4: Verify the Breakpoint Set
 
 List the breakpoints in the current workspace:
 
@@ -129,7 +147,7 @@ If `TARGET_LINES=11`, your dashboard can compute a percentage from snapshot acti
 
 ---
 
-## Step 4: Generate Traffic Through the File
+## Step 5: Generate Traffic Through the File
 
 Now hit the application path that exercises the file.
 This can be:
@@ -152,7 +170,7 @@ Each time one of your scattered breakpoints is hit, Live Debugger emits a snapsh
 
 ---
 
-## Step 5: Inspect Raw Coverage Data from `application.snapshots`
+## Step 6: Inspect Raw Coverage Data from `application.snapshots`
 
 Before building the dashboard, validate the data path directly with `dtctl query`.
 
@@ -207,5 +225,5 @@ fetch application.snapshots
 This is the core trick: the numerator comes from distinct line numbers in `application.snapshots`, and the denominator comes from the set of lines you intentionally instrumented.
 
 <div class="grid cards" markdown>
-- [Step 6: Building the Dashboard :octicons-arrow-right-24:](building-dashboard.md)
+- [Step 7: Building the Dashboard :octicons-arrow-right-24:](building-dashboard.md)
 </div>

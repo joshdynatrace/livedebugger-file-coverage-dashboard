@@ -75,25 +75,7 @@ dtctl doctor
 
 ---
 
-## 5. Set Workspace Filters
-
-`dtctl` resolves the Live Debugger workspace from the current working directory.
-Before creating breakpoints, tell it which workload to target:
-
-```bash
-dtctl update breakpoint --filters k8s.namespace.name:easytrade
-```
-
-Replace `easytrade` with your actual namespace if different.
-You can also filter by a specific process group instance:
-
-```bash
-dtctl update breakpoint --filters k8s.namespace.name:easytrade,dt.entity.process_group_instance:PROCESS_GROUP_INSTANCE-1234567890ABCDEF
-```
-
----
-
-## 6. Troubleshooting
+## 5. Troubleshooting
 
 ### Cluster health
 
