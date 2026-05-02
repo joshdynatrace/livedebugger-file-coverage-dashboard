@@ -38,6 +38,8 @@ Your platform token requires at least these scopes:
 - `app-engine:apps:run`
 - `dev-obs:breakpoints:set`
 - `storage:application.snapshots:read`
+- `document:documents:write`
+- `document:documents:delete`
 
 See the full list at [dtctl token-scope docs](https://dynatrace-oss.github.io/dtctl/docs/token-scopes){target=_blank}.
 
