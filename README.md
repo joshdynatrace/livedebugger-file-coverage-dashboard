@@ -23,7 +23,7 @@ To spin up the environment, go to **Code > Codespaces > New with options**, or d
 
 The environment will automatically:
 
-1. Install the RunMe CLI
+1. Install the DTCTL command line tool
 2. Create a local Kind Kubernetes cluster
 3. Install the Dynatrace OneAgent via the Dynatrace Operator
 4. Deploy the [EasyTrade](https://github.com/Dynatrace/easytrade) demo application via Helm
