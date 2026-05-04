@@ -870,7 +870,8 @@ cat<span class="w"> </span>breakpoint-lines.txt
 <p>Inspect a specific location:</p>
 <p><div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>describe<span class="w"> </span>breakpoint<span class="w"> </span><span class="s2">&quot;OrderController.java:306&quot;</span>
 </code></pre></div>
-Note that the breakpoint status should be 'enabled' and not 'pending' to capture breakpoint data.</p>
+Note that the breakpoint status should be 'Active' and not 'Pending' to capture breakpoint data.</p>
+<p><img alt="Breakpoints listed with enabled status" src="../img/get_breakpoints.jpg" /></p>
 <p>If you want a structured inventory of the scatter set:</p>
 <div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>get<span class="w"> </span>breakpoints<span class="w"> </span>-o<span class="w"> </span>json
 </code></pre></div>
@@ -881,8 +882,8 @@ Note that the breakpoint status should be 'enabled' and not 'pending' to capture
 <p>If <code>TARGET_LINES=11</code>, your dashboard can compute a percentage from snapshot activity alone.</p>
 <hr />
 <h2 id="step-5-generate-traffic-through-the-file">Step 5: Generate Traffic Through the File<a class="headerlink" href="#step-5-generate-traffic-through-the-file" title="Permanent link">#</a></h2>
-<p>Now hit the application path that exercises the file.
-This can be:</p>
+<p>Now hit the application path that exercises the file. In this case, the EasyTrade application has a load generator running which sends traffic through our file of interest, the OrderController.java.</p>
+<p>But this can also be:</p>
 <ul>
 <li>A curl loop against the service endpoint</li>
 <li>An integration test suite</li>
