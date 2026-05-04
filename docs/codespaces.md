@@ -37,6 +37,7 @@ Your platform token requires at least these scopes:
 
 - `app-engine:apps:run`
 - `dev-obs:breakpoints:set`
+- `storage:buckets:read`
 - `storage:application.snapshots:read`
 - `document:documents:write`
 - `document:documents:delete`
