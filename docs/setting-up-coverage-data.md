@@ -128,7 +128,9 @@ Inspect a specific location:
 ```bash
 dtctl describe breakpoint "OrderController.java:306"
 ```
-Note that the breakpoint status should be 'enabled' and not 'pending' to capture breakpoint data.
+Note that the breakpoint status should be 'Active' and not 'Pending' to capture breakpoint data.
+
+![Breakpoints listed with enabled status](img/get_breakpoints.jpg)
 
 If you want a structured inventory of the scatter set:
 
@@ -149,8 +151,9 @@ If `TARGET_LINES=11`, your dashboard can compute a percentage from snapshot acti
 
 ## Step 5: Generate Traffic Through the File
 
-Now hit the application path that exercises the file.
-This can be:
+Now hit the application path that exercises the file. In this case, the EasyTrade application has a load generator running which sends traffic through our file of interest, the OrderController.java.
+
+But this can also be:
 
 - A curl loop against the service endpoint
 - An integration test suite

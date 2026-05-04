@@ -197,6 +197,10 @@ dtctl delete dashboard "Live Debugger File Coverage - OrderController.java" -y
 dtctl create dashboard -f dashboard-file-coverage.yaml
 ```
 
+Finally, you should have a dashboard that looks something like this:
+
+![File coverage dashboard](img/file_coverage_dashboard.jpg)
+
 ---
 
 ## Step 8: Tighten the Dashboard to One Source File
