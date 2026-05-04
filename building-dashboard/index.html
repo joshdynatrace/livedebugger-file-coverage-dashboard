@@ -832,12 +832,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>Then create or update the dashboard:</p>
 <div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>dashboard-file-coverage.yaml
 </code></pre></div>
-<p><code>dtctl</code> will print the resulting dashboard URL after a successful apply.</p>
 <p>If you already created an earlier invalid draft of the dashboard, delete it first so you do not end up with two dashboards of the same name:</p>
 <div class="highlight"><pre><span></span><code>dtctl<span class="w"> </span>delete<span class="w"> </span>dashboard<span class="w"> </span><span class="s2">&quot;Live Debugger File Coverage - OrderController.java&quot;</span><span class="w"> </span>-y
 dtctl<span class="w"> </span>create<span class="w"> </span>dashboard<span class="w"> </span>-f<span class="w"> </span>dashboard-file-coverage.yaml
 </code></pre></div>
-<p>Finally, you should have a dashboard that looks something like this:</p>
+<p>Next navigate to your Dynatrace environment and open up the Dashboards app.</p>
+<p>You should have a dashboard that looks something like this:</p>
 <p><img alt="File coverage dashboard" src="../img/file_coverage_dashboard.jpg" /></p>
 <hr />
 <h2 id="step-8-tighten-the-dashboard-to-one-source-file">Step 8: Tighten the Dashboard to One Source File<a class="headerlink" href="#step-8-tighten-the-dashboard-to-one-source-file" title="Permanent link">#</a></h2>
