@@ -42,4 +42,4 @@ Default credentials: `demouser` / `demopass`
 
 ---
 
-## [📊 Get started building a File Coverage Dashboard!](https://joshdynatrace.github.io/livedebugger-file-coverage-dashboard/)
+## [📊 Get started building a File Coverage Dashboard!](https://dynatrace.github.io/livedebugger-file-coverage-dashboard/)
