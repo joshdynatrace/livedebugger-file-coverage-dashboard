@@ -19,7 +19,7 @@ The walkthrough shows how to scatter Live Debugger breakpoints across a source f
 
 ## Getting started
 
-To spin up the environment, go to **Code > Codespaces > New with options**, or directly by [clicking here](https://codespaces.new/joshDynatrace/livedebugger-file-coverage-dashboard?quickstart=1).
+To spin up the environment, go to **Code > Codespaces > New with options**
 
 The environment will automatically:
 
